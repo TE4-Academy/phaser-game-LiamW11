@@ -27,11 +27,14 @@ const config = {
 // =============================================================================
 let player;          // Spelare-sprite
 let coins;           // Grupp av mynt
+let powerUps;        // Powerup stjärna
 let cursors;         // Piltangent-kontroller
 let score = 0;       // Poäng
 let coinsCollected = 0;  // Antal mynt samlade
+let powerUpsCollected = 0; // Antal powerups samlade
 let gameState = 'playing';  // Spelstatus
 let timeLeft = 30;  // 30 sekunder
+let winAmount = 10;
 
 // =============================================================================
 // Preload-funktion (fungerar)
@@ -40,12 +43,15 @@ function preload() {
     // Vi använder bara färgade former, så inget att ladda
     console.log('Preload: Inga assets att ladda');
     this.load.audio('coinSound', 'coin-sound.mp3');
+    this.load.audio('powerUpSound', 'powerup-sound.mp3')
 }
 
 // =============================================================================
 // Create-funktion (har problem!)
 // =============================================================================
 function create() {
+    updateHighscore();
+    document.getElementById('coins-left').textContent = winAmount;
     // Skapa spelare (blå fyrkant)
     player = this.add.rectangle(100, 100, 32, 32, 0x0099ff);
     this.physics.add.existing(player);
@@ -55,19 +61,19 @@ function create() {
 
     // Skapa grupp för mynt
     coins = this.physics.add.group();
-
+    powerUps = this.physics.add.group();
     // PROBLEM: Bara 2 mynt skapas istället för 5!
-    createCoin(this, 200, 150);
-    createCoin(this, 400, 300);
-    createCoin(this, 600, 200);
-    createCoin(this, 300, 450);
-    createCoin(this, 700, 400);
+    for(i = 0; i < winAmount; i++){
+        createCoin(this, (Math.random() * 400 + 100), (Math.random() * 400 + 100));
+    }
+    createPowerUp(this, ((Math.random() * 300) + 200), ((Math.random() * 300) + 200));
 
     // Skapa piltangent-kontroller
     cursors = this.input.keyboard.createCursorKeys();
 
     // PROBLEM: Kollision är inte uppsatt!
      this.physics.add.overlap(player, coins, collectCoin, null, this);
+     this.physics.add.overlap(player, powerUps, collectPowerup, null, this);
 
     gameTimer = this.time.addEvent({
     delay: 1000,
@@ -75,7 +81,6 @@ function create() {
     callbackScope: this,
     loop: true
 });
-
     console.log('Create: Spel skapat, men har problem...');
 }
 
@@ -90,6 +95,27 @@ function updateTimer() {
     }
 }
 
+function getHighScore(){
+    return Number(localStorage.getItem('highScore')) || 0;
+}
+
+function saveHighScore() {
+    const currentHigh = Number(localStorage.getItem('highScore')) || 0;
+    if (score > currentHigh) {
+        localStorage.setItem('highScore', score.toString());
+        alert('Nytt rekord!');
+    }
+    return currentHigh;
+}
+
+function updateHighscore() {
+    const currentHighScore = getHighScore();
+    const highScoreElement = document.getElementById('highScore');
+    if (highScoreElement) {
+        highScoreElement.textContent = currentHighScore;
+    }
+}
+
 // =============================================================================
 // Funktion för att skapa mynt (fungerar)
 // =============================================================================
@@ -97,6 +123,12 @@ function createCoin(scene, x, y) {
     const coin = scene.add.circle(x, y, 16, 0xffff00);  // Gul cirkel
     scene.physics.add.existing(coin);
     coins.add(coin);
+}
+
+function createPowerUp(scene, x, y) {
+    const powerUp = scene.add.star(x, y, 5, 10, 20, 0xff0000);  // Röd stjärna
+    scene.physics.add.existing(powerUp);
+    powerUps.add(powerUp);
 }
 
 // =============================================================================
@@ -141,17 +173,25 @@ function handlePlayerMovement() {
 // TODO: Skriv denna funktion
  function collectCoin(player, coin) {
 //     // Ta bort myntet
-     coin.destroy();
-//     
+     coin.destroy();  
 //     // Öka poäng
      score += 10;
      coinsCollected++;
-    this.sound.play('coinSound');
-//     
+    this.sound.play('coinSound'); 
 //     // Uppdatera UI
-     updateScore();
-//     
+     updateScore();  
      console.log('Mynt samlat! Poäng:', score);
+ }
+
+  function collectPowerup(player, powerUp) {
+//     // Ta bort myntet
+     powerUp.destroy();  
+//     // Öka poäng
+     score += 50;
+     powerUpsCollected++;
+     this.sound.play('powerUpSound');  
+//     // Uppdatera UI
+     updateScore(); 
  }
 
 // =============================================================================
@@ -160,7 +200,7 @@ function handlePlayerMovement() {
 // TODO: Skriv denna funktion
  function updateScore() {
      document.getElementById('score').textContent = score;
-     document.getElementById('coins-left').textContent = (5 - coinsCollected);
+     document.getElementById('coins-left').textContent = (winAmount - coinsCollected);
  }
 
 // =============================================================================
@@ -168,11 +208,14 @@ function handlePlayerMovement() {
 // =============================================================================
 // TODO: Skriv denna funktion
 function checkWinCondition() {
-    if (coinsCollected >= 5 && gameState === 'playing') {
+    if (coinsCollected >= winAmount && powerUpsCollected === 1 && gameState === 'playing') {
         gameState = 'won';
          console.log('Du vann!');
+         gameTimer.remove();
+         saveHighScore();
+         updateHighscore();
 //         // Visa win-meddelande
-          alert('Grattis! Du samlade alla mynt!');
+          alert('Grattis! Du samlade alla mynt och powerups!');
      }
  }
 
