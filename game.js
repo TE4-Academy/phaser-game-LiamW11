@@ -87,10 +87,10 @@ function update() {
     handlePlayerMovement();
 
     // PROBLEM: Debug uppdateras inte!
-    // updateDebug();
+     updateDebug();
 
     // PROBLEM: Win-condition saknas!
-    // checkWinCondition();
+     checkWinCondition();
 }
 
 // =============================================================================
@@ -146,14 +146,14 @@ function handlePlayerMovement() {
 // Win-condition (saknas!)
 // =============================================================================
 // TODO: Skriv denna funktion
-// function checkWinCondition() {
-//     if (coinsCollected >= 5 && gameState === 'playing') {
-//         gameState = 'won';
-//         console.log('Du vann!');
+function checkWinCondition() {
+    if (coinsCollected >= 5 && gameState === 'playing') {
+        gameState = 'won';
+         console.log('Du vann!');
 //         // Visa win-meddelande
-//         // alert('Grattis! Du samlade alla mynt!');
-//     }
-// }
+          alert('Grattis! Du samlade alla mynt!');
+     }
+ }
 
 // =============================================================================
 // Debug-funktion (fungerar delvis)
