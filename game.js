@@ -31,6 +31,7 @@ let cursors;         // Piltangent-kontroller
 let score = 0;       // Poäng
 let coinsCollected = 0;  // Antal mynt samlade
 let gameState = 'playing';  // Spelstatus
+let timeLeft = 30;  // 30 sekunder
 
 // =============================================================================
 // Preload-funktion (fungerar)
@@ -38,6 +39,7 @@ let gameState = 'playing';  // Spelstatus
 function preload() {
     // Vi använder bara färgade former, så inget att ladda
     console.log('Preload: Inga assets att ladda');
+    this.load.audio('coinSound', 'coin-sound.mp3');
 }
 
 // =============================================================================
@@ -67,7 +69,25 @@ function create() {
     // PROBLEM: Kollision är inte uppsatt!
      this.physics.add.overlap(player, coins, collectCoin, null, this);
 
+    gameTimer = this.time.addEvent({
+    delay: 1000,
+    callback: updateTimer,
+    callbackScope: this,
+    loop: true
+});
+
     console.log('Create: Spel skapat, men har problem...');
+}
+
+function updateTimer() {
+    timeLeft--;
+    document.getElementById('timer').textContent = timeLeft;
+    
+    if (timeLeft === 0) {
+        gameState = 'lost';
+        alert('Tiden är slut!');
+        gameTimer.remove();
+    }
 }
 
 // =============================================================================
@@ -126,6 +146,7 @@ function handlePlayerMovement() {
 //     // Öka poäng
      score += 10;
      coinsCollected++;
+    this.sound.play('coinSound');
 //     
 //     // Uppdatera UI
      updateScore();
