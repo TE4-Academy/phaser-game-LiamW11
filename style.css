@@ -1,28 +1,24 @@
 /* Phaser Basics CSS - har några problem som du behöver fixa! */
 
 body {
-    font-family: Arial, sans-serif;
-    margin: 10px;
-    /* Väldigt liten margin? */
-    background-color: white;
-    /* Kanske lite tråkigt? */
+    font-family:'Times New Roman', Times, serif;
+    margin: 20px;                    /* Istället för 10px */
+    background-color: #f5f5f5;       /* Istället för white */
 }
 
 .container {
     max-width: 900px;
     margin: 0 auto;
-    padding: 10px;
-    /* För liten padding? */
-    /* Ingen bakgrund eller skugga? Ser platt ut */
+    padding: 30px;                   /* Istället för 10px */
+    background-color: white;         /* Lägg till */
+    border-radius: 10px;             /* Lägg till */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Lägg till */
 }
 
-h1 {
-    text-align: left;
-    /* Borde kanske vara centrerad? */
-    color: black;
-    /* Lite tråkig färg? */
-    margin-bottom: 10px;
-    /* För liten margin? */
+h1, p {
+    text-align: center;              /* Istället för left */
+    color: #333;                     /* Istället för black */
+    margin-bottom: 20px;             /* Istället för 10px */
 }
 
 /* Game container */
@@ -33,7 +29,8 @@ h1 {
 }
 
 canvas {
-    /* Ingen styling för canvas? */
+    border: 3px solid #333;          /* Lägg till */
+    border-radius: 5px;              /* Lägg till */
     display: block;
     margin: 0 auto;
 }
@@ -41,19 +38,16 @@ canvas {
 /* Statistik */
 .stats {
     background-color: #f0f0f0;
-    padding: 5px;
-    /* För liten padding? */
     text-align: center;
     margin: 10px 0;
-    font-size: 12px;
-    /* För liten text? */
-    /* Kanske behöver bättre styling? */
+    padding: 15px;                   /* Istället för 5px */
+    font-size: 18px;                 /* Istället för 12px */
+    border-radius: 5px;              /* Lägg till */
 }
 
 .stats span {
     font-weight: bold;
-    color: black;
-    /* Kanske lite tråkig färg? */
+    color: #007acc;
 }
 
 /* Debug-område */
