@@ -57,15 +57,15 @@ function create() {
     // PROBLEM: Bara 2 mynt skapas istället för 5!
     createCoin(this, 200, 150);
     createCoin(this, 400, 300);
-    // createCoin(this, 600, 200);
-    // createCoin(this, 300, 450);
-    // createCoin(this, 700, 400);
+    createCoin(this, 600, 200);
+    createCoin(this, 300, 450);
+    createCoin(this, 700, 400);
 
     // Skapa piltangent-kontroller
     cursors = this.input.keyboard.createCursorKeys();
 
     // PROBLEM: Kollision är inte uppsatt!
-    // this.physics.add.overlap(player, coins, collectCoin, null, this);
+     this.physics.add.overlap(player, coins, collectCoin, null, this);
 
     console.log('Create: Spel skapat, men har problem...');
 }
@@ -119,28 +119,28 @@ function handlePlayerMovement() {
 // Kollisions-hantering (saknas!)
 // =============================================================================
 // TODO: Skriv denna funktion
-// function collectCoin(player, coin) {
+ function collectCoin(player, coin) {
 //     // Ta bort myntet
-//     coin.destroy();
+     coin.destroy();
 //     
 //     // Öka poäng
-//     score += 10;
-//     coinsCollected++;
+     score += 10;
+     coinsCollected++;
 //     
 //     // Uppdatera UI
-//     updateScore();
+     updateScore();
 //     
-//     console.log('Mynt samlat! Poäng:', score);
-// }
+     console.log('Mynt samlat! Poäng:', score);
+ }
 
 // =============================================================================
 // UI-uppdatering (saknas!)
 // =============================================================================
 // TODO: Skriv denna funktion
-// function updateScore() {
-//     document.getElementById('score').textContent = score;
-//     document.getElementById('coins-left').textContent = (5 - coinsCollected);
-// }
+ function updateScore() {
+     document.getElementById('score').textContent = score;
+     document.getElementById('coins-left').textContent = (5 - coinsCollected);
+ }
 
 // =============================================================================
 // Win-condition (saknas!)
